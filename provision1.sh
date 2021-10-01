@@ -1,44 +1,17 @@
 #!/bin/bash
-MYID=`id -u`
-if [ $MYID -ne 0 ]; then
-	echo "Please run this script as root" && exit 99
-fi
-NGINX_CONF="dXNlciB3d3ctZGF0YTsgCndvcmtlcl9wcm9jZXNzZXMgIDE7CgplcnJvcl9sb2cgIC92YXIvbG9n
-L25naW54L2Vycm9yLmxvZyB3YXJuOwpwaWQgICAgICAgIC92YXIvcnVuL25naW54LnBpZDsKCgpl
-dmVudHMgewogICAgd29ya2VyX2Nvbm5lY3Rpb25zICAxMDI0Owp9CgoKaHR0cCB7CiAgICBzZXJ2
-ZXJfbmFtZXNfaGFzaF9idWNrZXRfc2l6ZSAxMjg7CgogICAgaW5jbHVkZSAgICAgICAvZXRjL25n
-aW54L21pbWUudHlwZXM7CiAgICBkZWZhdWx0X3R5cGUgIGFwcGxpY2F0aW9uL29jdGV0LXN0cmVh
-bTsKCiAgICBsb2dfZm9ybWF0ICBtYWluICAnJHJlbW90ZV9hZGRyIC0gJHJlbW90ZV91c2VyIFsk
-dGltZV9sb2NhbF0gIiRyZXF1ZXN0IiAnCiAgICAgICAgICAgICAgICAgICAgICAnJHN0YXR1cyAk
-Ym9keV9ieXRlc19zZW50ICIkaHR0cF9yZWZlcmVyIiAnCiAgICAgICAgICAgICAgICAgICAgICAn
-IiRodHRwX3VzZXJfYWdlbnQiICIkaHR0cF94X2ZvcndhcmRlZF9mb3IiJzsKCiAgICBhY2Nlc3Nf
-bG9nICAvdmFyL2xvZy9uZ2lueC9hY2Nlc3MubG9nICBtYWluOwoKCiAgICBmYXN0Y2dpX2J1ZmZl
-cnMgMTYgMTZrOwogICAgZmFzdGNnaV9idWZmZXJfc2l6ZSAzMms7CgogICAgc2VuZGZpbGUgICAg
-ICAgIG9mZjsKICAgICN0Y3Bfbm9wdXNoICAgICBvbjsKCiAgICBrZWVwYWxpdmVfdGltZW91dCAg
-NjU7CgogICAgI2d6aXAgIG9uOwogICAgc2VydmVyX3Rva2VucyBvZmY7CgogICAgc2VydmVyIHsK
-ICAgICAgICBsaXN0ZW4gICAgICAgODA7CiAgICAgICAgc2VydmVyX25hbWUgIF87CiAgICAgICAg
-cm9vdCAvcHJvamVjdC93ZWI7CiAgICAgICAgY2xpZW50X21heF9ib2R5X3NpemUgMTI3TTsKICAg
-ICAgICBpbmRleCBpbmRleC5waHA7CgogICAgICAgIGFkZF9oZWFkZXIgWC1YU1MtUHJvdGVjdGlv
-biAiMTsgbW9kZT1ibG9jayI7CiAgICAgICAgYWRkX2hlYWRlciBYLUZyYW1lLU9wdGlvbnMgREVO
-WTsKICAgICAgICBhZGRfaGVhZGVyIFgtQ29udGVudC1UeXBlLU9wdGlvbnMgbm9zbmlmZjsKCWxv
-Y2F0aW9uIC8gewogICAgICAgIHRyeV9maWxlcyAkdXJpICR1cmkvIC9pbmRleC5waHA/JHF1ZXJ5
-X3N0cmluZzsKICAgICAgICB9CiAgICAgICAgbG9jYXRpb24gfiBcLnBocCQgewogICAgICAgIGZh
-c3RjZ2lfcGFzcyB1bml4Oi92YXIvcnVuL3BocC9waHA3LjQtZnBtLnNvY2s7CiAgICAgICAgZmFz
-dGNnaV9wYXJhbSBTQ1JJUFRfRklMRU5BTUUgJHJlYWxwYXRoX3Jvb3QkZmFzdGNnaV9zY3JpcHRf
-bmFtZTsKICAgICAgICBpbmNsdWRlIGZhc3RjZ2lfcGFyYW1zOwogICAgICAgIH0KICAgIH0KfQo="
+set -x
+IFS=
+
+NGINX_CONF="dXNlciB3d3ctZGF0YTsgCndvcmtlcl9wcm9jZXNzZXMgIDE7CgplcnJvcl9sb2cgIC92YXIvbG9nL25naW54L2Vycm9yLmxvZyB3YXJuOwpwaWQgICAgICAgIC92YXIvcnVuL25naW54LnBpZDsKCgpldmVudHMgewogICAgd29ya2VyX2Nvbm5lY3Rpb25zICAxMDI0Owp9CgoKaHR0cCB7CiAgICBzZXJ2ZXJfbmFtZXNfaGFzaF9idWNrZXRfc2l6ZSAxMjg7CgogICAgaW5jbHVkZSAgICAgICAvZXRjL25naW54L21pbWUudHlwZXM7CiAgICBkZWZhdWx0X3R5cGUgIGFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbTsKCiAgICBsb2dfZm9ybWF0ICBtYWluICAnJHJlbW90ZV9hZGRyIC0gJHJlbW90ZV91c2VyIFskdGltZV9sb2NhbF0gIiRyZXF1ZXN0IiAnCiAgICAgICAgICAgICAgICAgICAgICAnJHN0YXR1cyAkYm9keV9ieXRlc19zZW50ICIkaHR0cF9yZWZlcmVyIiAnCiAgICAgICAgICAgICAgICAgICAgICAnIiRodHRwX3VzZXJfYWdlbnQiICIkaHR0cF94X2ZvcndhcmRlZF9mb3IiJzsKCiAgICBhY2Nlc3NfbG9nICAvdmFyL2xvZy9uZ2lueC9hY2Nlc3MubG9nICBtYWluOwoKCiAgICBmYXN0Y2dpX2J1ZmZlcnMgMTYgMTZrOwogICAgZmFzdGNnaV9idWZmZXJfc2l6ZSAzMms7CgogICAgc2VuZGZpbGUgICAgICAgIG9mZjsKICAgICN0Y3Bfbm9wdXNoICAgICBvbjsKCiAgICBrZWVwYWxpdmVfdGltZW91dCAgNjU7CgogICAgI2d6aXAgIG9uOwogICAgc2VydmVyX3Rva2VucyBvZmY7CgogICAgc2VydmVyIHsKICAgICAgICBsaXN0ZW4gICAgICAgODA7CiAgICAgICAgc2VydmVyX25hbWUgIF87CiAgICAgICAgcm9vdCAvcHJvamVjdC93ZWI7CiAgICAgICAgY2xpZW50X21heF9ib2R5X3NpemUgMTI3TTsKICAgICAgICBpbmRleCBpbmRleC5waHA7CgogICAgICAgIGFkZF9oZWFkZXIgWC1YU1MtUHJvdGVjdGlvbiAiMTsgbW9kZT1ibG9jayI7CiAgICAgICAgYWRkX2hlYWRlciBYLUZyYW1lLU9wdGlvbnMgREVOWTsKICAgICAgICBhZGRfaGVhZGVyIFgtQ29udGVudC1UeXBlLU9wdGlvbnMgbm9zbmlmZjsKCWxvY2F0aW9uIC8gewogICAgICAgIHRyeV9maWxlcyAkdXJpICR1cmkvIC9pbmRleC5waHA/JHF1ZXJ5X3N0cmluZzsKICAgICAgICB9CiAgICAgICAgbG9jYXRpb24gfiBcLnBocCQgewogICAgICAgIGZhc3RjZ2lfcGFzcyB1bml4Oi92YXIvcnVuL3BocC9waHA3LjQtZnBtLnNvY2s7CiAgICAgICAgZmFzdGNnaV9wYXJhbSBTQ1JJUFRfRklMRU5BTUUgJHJlYWxwYXRoX3Jvb3QkZmFzdGNnaV9zY3JpcHRfbmFtZTsKICAgICAgICBpbmNsdWRlIGZhc3RjZ2lfcGFyYW1zOwogICAgICAgIH0KICAgIH0KfQo="
+
 NGINX_CONF_DECODED=$( echo "${NGINX_CONF}"| base64 -d )
-echo $NGINX_CONF_DECODED
+echo -n ${NGINX_CONF_DECODED} 
 if [ -f "/etc/nginx/conf.d/default.conf" ]; then
-	rm -f /etc/nginx/conf.d/default
+        rm -f /etc/nginx/conf.d/default
 fi
-if [ -f "/etc/nginx/nginx.conf" ]; then 
-	echo "Nginx is already installed"; apt remove -y nginx --purge;
-else 
-	apt install -y nginx && \
-	echo $NGINX_CONF_DECODED &> /etc/nginx/nginx.conf && \
-	service nginx restart
-fi
-# updating your server’s package
+apt install -y nginx && \
+echo -n "${NGINX_CONF_DECODED}" &> /etc/nginx/nginx.conf && \
+service nginx restart# updating your server’s package
 sudo apt update
 sudo add-apt-repository -yu ppa:ondrej/php
 sudo useradd -m -d /project/ www-data
@@ -470,3 +443,24 @@ sudo apt install php-pear
 wget https://phar.phpunit.de/phpunit-6.5.phar
 chmod +x phpunit-6.5.phar
 sudo mv phpunit-6.5.phar /usr/local/bin/phpunit
+
+echo "* Installation of open-vm-tools"
+sudo apt install -y open-vm-tools
+
+echo "* add salt server to /etc/hosts"
+echo 10.4.12.43 salt-server >> /etc/hosts
+
+echo "* Download the bootstrap script for Salt Node (Minion)"
+wget -O bootstrap-salt.sh https://bootstrap.saltstack.com
+
+echo "* Install the latest stable version of just the minion part and run it as a daemon"
+sudo sh bootstrap-salt.sh
+
+echo "* Uncomment the master section, and enter the Salt server name (salt-server)"
+echo master: salt-server >> /etc/salt/minion
+
+echo "* Restart the salt service"
+sudo systemctl restart salt-minion
+
+dpkg-reconfigure openssh-server
+
